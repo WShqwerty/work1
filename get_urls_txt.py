@@ -5,11 +5,13 @@ from time import sleep
 
 def main():
     print("work start!")
+    # change page num;
     n = 20
     urls = []
     name = ""
     urls_get = []
     for i in range(1, n+1):
+        # url http://www.177picyy.com/html/2022/01/4772612.html
         urls.append(f"http://www.177picyy.com/html/2022/01/4772612.html/{i}/")
     driver = webdriver.Chrome()
     try:

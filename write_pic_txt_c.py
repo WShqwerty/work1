@@ -12,33 +12,34 @@ def mkdir(path):
 
 
 class UrlThread(threading.Thread):
-    def __init__(self, id, name, urls):
+    def __init__(self, i, name, urls):
         threading.Thread.__init__(self)
         self.name = name
-        self.id = id
+        self.i = i
         self.urls = urls
 
     def run(self):
-        write_pic(self.name, self.id, self.urls)
+        write_pic(self.name, self.i, self.urls)
 
 
-def write_pic(name, id, urls):
+def write_pic(name, i, urls):
     driver = webdriver.Chrome()
     try:
         for url in urls:
+            if os.path.exists(f'photo/{name}/{i}.png'):
+                i += 1
+                continue
             driver.get(url)
             sleep(1)
             element = driver.find_element(By.XPATH, "//img")
-            element.screenshot(f'photo/{name}/{id}.png')
-            id += 1
+            element.screenshot(f'photo/{name}/{i}.png')
+            i += 1
     finally:
         driver.close()
         driver.quit()
 
 
 def main():
-    print("hello")
-    urls = []
     with open("url.txt", "r")as f:
         urls = f.readlines()
         f.close()
@@ -47,7 +48,7 @@ def main():
     mkdir(f"photo/{name}")
 
     urls_four = int(len(urls)/4)
-    if len(urls)%4 != 0:
+    if len(urls) % 4 != 0:
         urls_four += 1
     
     url_one = urls[0:urls_four:]
@@ -75,4 +76,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
